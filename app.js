@@ -8,16 +8,21 @@ var css_selector = "html body.search div table#table1 tbody tr td table#table2 t
 
 var browser = new Browser()
 
+// Map the scrapePage function onto the page numbers we want to scrape.
+// This is having problems regarding the scope of the browser object.
 /*
 async.map([1, 2, 3], scrapePage, function(err, results) {
   console.log(results.join("\n"));
 });
 */
 
+// Test the scrapePage on the first page
 scrapePage(1, function(error, results) {
   console.log(results);
 });
 
+// Take a particular page number, visit the url, use the css selector to get the rows,
+// map those rows onto the rowToStr function, and return the results joined by \n
 function scrapePage(page_no, next) {
   browser.visit(base_url + page_no).
     then(function() {
@@ -32,6 +37,8 @@ function scrapePage(page_no, next) {
     });
 }
 
+// Take a particular row, break it down into fields, map those fields onto 
+// fieldToStr, and return the results joined by |
 function rowToStr(row, next) {
   var fields = browser.queryAll("td", row);
   async.map(fields, fieldToStr, function(err, results) {
@@ -39,6 +46,7 @@ function rowToStr(row, next) {
   });
 }
 
+// Extract the text in the p tags in a particular field and return it
 function fieldToStr(field, next) {
   next(null, browser.text("p", field));
 }
