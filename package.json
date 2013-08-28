@@ -1,0 +1,20 @@
+{
+  "name": "scraper",
+  "version": "0.0.1",
+  "author": "johnl79",
+  "description": "Simple page scraper.",
+  "private": true,
+  "scripts": {
+    "test": "node test.js"
+  },
+  "repository" :
+  { "type" : "git"
+  , "url" : "https://github.com/johnl79/scraper.git"
+  },
+  "main": "scraper.js",
+  "dependencies": {
+    "zombie": "*",
+    "async": "*",
+    "assert": "*"
+  }
+}
