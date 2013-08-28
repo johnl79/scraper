@@ -2,26 +2,33 @@ var Browser = require("zombie");
 var assert = require("assert");
 var async = require("async");
 
-var browser = new Browser();
-
-var url = "http://www.glycemicindex.com/foodSearch.php?ak=list&food_name_search_type=cn&food_name=&gi_search_type=lte&gi=&gl_search_type=lte&gl=&country=&product_category=&lop=OR&find=Find+Records&page=1"
+var base_url = "http://www.glycemicindex.com/foodSearch.php?ak=list&food_name_search_type=cn&food_name=&gi_search_type=lte&gi=&gl_search_type=lte&gl=&country=&product_category=&lop=OR&find=Find+Records&page="
 
 var css_selector = "html body.search div table#table1 tbody tr td table#table2 tbody tr td table#table39 tbody tr td table#table42 tbody tr td table#table43 tbody tr td table tbody tr";
 
-scrapePage(url, null);
+var browser = new Browser()
 
-function scrapePage(url, next) {
-  browser.visit(url).
+/*
+async.map([1, 2, 3], scrapePage, function(err, results) {
+  console.log(results.join("\n"));
+});
+*/
+
+scrapePage(1, function(error, results) {
+  console.log(results);
+});
+
+function scrapePage(page_no, next) {
+  browser.visit(base_url + page_no).
     then(function() {
       var rows = browser.queryAll(css_selector);
       rows.shift();
       async.map(rows, rowToStr, function(err, results) {
-        console.log( results.join("\n") );
-        console.log( results.length );
+        next(null, results.join("\n"));
       });
     }).
     fail(function(error) {
-      console.log(error);
+      next(error, null);
     });
 }
 
