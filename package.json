@@ -15,6 +15,7 @@
   "dependencies": {
     "zombie": "*",
     "async": "*",
-    "assert": "*"
+    "assert": "*",
+    "underscore": "*"
   }
 }
