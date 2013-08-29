@@ -1,35 +1,34 @@
 var Browser = require("zombie");
 var assert = require("assert");
 var async = require("async");
+var _ = require("underscore");
 
-var base_url = "http://www.glycemicindex.com/foodSearch.php?ak=list&food_name_search_type=cn&food_name=&gi_search_type=lte&gi=&gl_search_type=lte&gl=&country=&product_category=&lop=OR&find=Find+Records&page="
+var base_url = "http://www.glycemicindex.com/foodSearch.php?ak=list&food_name_search_type=cn&food_name=&gi_search_type=lte&gi=&gl_search_type=lte&gl=&country=&product_category=&lop=OR&find=Find+Records&page=";
 
 var css_selector = "html body.search div table#table1 tbody tr td table#table2 tbody tr td table#table39 tbody tr td table#table42 tbody tr td table#table43 tbody tr td table tbody tr";
 
-var browser = new Browser()
+var browser = new Browser();
 
-// Map the scrapePage function onto the page numbers we want to scrape.
-// This is having problems regarding the scope of the browser object.
-/*
-async.map([1, 2, 3], scrapePage, function(err, results) {
-  console.log(results.join("\n"));
-});
-*/
-
-// Test the scrapePage on the first page
-scrapePage(1, function(error, results) {
-  console.log(results);
+// For now, run the scrapePage function in series over all 2603 pages
+var number_of_pages = 2603;
+var page_numbers = _.range(number_of_pages);
+async.eachSeries(page_numbers, scrapePage, function(error) {
+  console.error("Done!");
 });
 
 // Take a particular page number, visit the url, use the css selector to get the rows,
 // map those rows onto the rowToStr function, and return the results joined by \n
 function scrapePage(page_no, next) {
+  if(page_no % 100 == 0) {
+    console.error("Page " + page_no + "/" + number_of_pages);
+  }
   browser.visit(base_url + page_no).
     then(function() {
       var rows = browser.queryAll(css_selector);
       rows.shift();
       async.map(rows, rowToStr, function(err, results) {
-        next(null, results.join("\n"));
+        console.log(results.join("\n"));
+        next(null);
       });
     }).
     fail(function(error) {
