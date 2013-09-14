@@ -34,8 +34,8 @@ rather than asynchronously like the pagnated results. The URL looks like
 
 The `ID` variable shows signs of just being a sequential index, however,
 the search space is rather large, and seems to be filled in starting at
-of 8 or 9 decimal digits. Of what we've seen, the botom most record has
-been `99995977`, with other records stretching to `112552055`. The population
+of 8 or 9 decimal digits. Of what we've seen, the bottom and top of the sequence
+seems to be `99995977`, and `124067330` respectively. The population
 of Indiana is about 6.5 million. In that context, a 12 million wide stretch of 
 sequential `ID` makes reasonable sense when accounting for commercial, industrial,
 residential types of property. There are statistical tests that could more clearly
